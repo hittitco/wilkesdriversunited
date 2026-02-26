@@ -324,6 +324,25 @@ footer a:hover{color:var(--indigo-bright);}
 @media(max-width:600px){
   .driver-panel{top:auto;bottom:20px;right:16px;top:unset;}
 }
+
+/* ── CB RADIO FEATURE CARD ── */
+.cb-display{
+  background:#0a0f0a;
+  border:2px solid rgba(34,197,94,0.3);
+  border-radius:8px;
+  padding:12px 18px;
+  display:flex;flex-direction:column;gap:6px;
+  box-shadow:0 0 24px rgba(34,197,94,0.08),inset 0 0 20px rgba(0,0,0,.5);
+  min-width:170px;flex-shrink:0;
+  position:relative;overflow:hidden;
+}
+.cb-display::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(34,197,94,0.4),transparent);}
+.cb-freq{font-family:'Courier New',monospace;font-size:1.6rem;font-weight:700;color:#22c55e;letter-spacing:.08em;line-height:1;text-shadow:0 0 12px rgba(34,197,94,.8),0 0 24px rgba(34,197,94,.4);position:relative;}
+/* scanline over display */
+.cb-freq::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.15) 2px,rgba(0,0,0,.15) 4px);pointer-events:none;}
+.cb-channel{font-family:'Courier New',monospace;font-size:.62rem;letter-spacing:.14em;color:rgba(34,197,94,.5);text-transform:uppercase;}
+.cb-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.9);animation:cbBlink 2s ease-in-out infinite;display:inline-block;margin-right:6px;}
+@keyframes cbBlink{0%,100%{opacity:1;box-shadow:0 0 8px rgba(34,197,94,.9);}50%{opacity:.4;box-shadow:0 0 3px rgba(34,197,94,.3);}}
 .d1{transition-delay:.1s}.d2{transition-delay:.22s}.d3{transition-delay:.34s}.d4{transition-delay:.46s}
 /* ── MOBILE OVERRIDES ── */
 @media(max-width:480px){
@@ -503,7 +522,7 @@ footer a:hover{color:var(--indigo-bright);}
 
     <!-- Road Conditions: cloud + rain -->
     <div class="fcard reveal d1">
-      <div class="fc-num">01 / 04</div>
+      <div class="fc-num">01 / 06</div>
       <svg class="fc-icon-svg" viewBox="0 0 46 46">
         <path class="stroke ind" d="M13 29a8 8 0 1 1 .1-16 10 10 0 0 1 19.8 2H33a6 6 0 0 1 0 12H13z"/>
         <line class="stroke ind" x1="17" y1="34" x2="17" y2="40"/>
@@ -516,7 +535,7 @@ footer a:hover{color:var(--indigo-bright);}
 
     <!-- The Garage: wrench -->
     <div class="fcard reveal d2">
-      <div class="fc-num">02 / 04</div>
+      <div class="fc-num">02 / 06</div>
       <svg class="fc-icon-svg" viewBox="0 0 46 46">
         <path class="stroke crim" d="M32 9a9 9 0 0 0-11.5 11.8L8 33a3.2 3.2 0 0 0 4.5 4.5l12.2-12.5A9 9 0 0 0 32 9z"/>
         <circle class="stroke crim" cx="32" cy="14" r="2.5"/>
@@ -527,7 +546,7 @@ footer a:hover{color:var(--indigo-bright);}
 
     <!-- Driver Education: broadcast signal -->
     <div class="fcard reveal d3">
-      <div class="fc-num">03 / 04</div>
+      <div class="fc-num">03 / 06</div>
       <svg class="fc-icon-svg" viewBox="0 0 46 46">
         <circle class="stroke ind" cx="23" cy="28" r="3"/>
         <path class="stroke ind" d="M15 36a11 11 0 0 1 0-16"/>
@@ -542,7 +561,7 @@ footer a:hover{color:var(--indigo-bright);}
 
     <!-- Announcements: megaphone -->
     <div class="fcard reveal d4">
-      <div class="fc-num">04 / 04</div>
+      <div class="fc-num">04 / 06</div>
       <svg class="fc-icon-svg" viewBox="0 0 46 46">
         <path class="stroke crim" d="M7 17v10h6l14 10V7L13 17H7z"/>
         <path class="stroke crim" d="M35 15a9 9 0 0 1 0 14"/>
@@ -550,6 +569,61 @@ footer a:hover{color:var(--indigo-bright);}
       </svg>
       <h3 class="fc-title">Announcements</h3>
       <p class="fc-desc">Policy changes, Walmart+ updates, surge alerts — curated and posted so the important stuff never gets buried.</p>
+    </div>
+
+    <div class="fcard reveal d1" style="grid-column:1/-1;border-color:rgba(99,102,241,0.3);background:rgba(18,16,46,0.65);">
+      <div class="fc-num">05 / 06 &nbsp;·&nbsp; <span style="color:var(--indigo-bright);letter-spacing:.08em;">ADVANCED FEATURE</span></div>
+      <svg class="fc-icon-svg" viewBox="0 0 46 46" style="width:52px;height:52px;">
+        <rect class="stroke ind" x="6"  y="30" width="6" height="10" rx="1"/>
+        <rect class="stroke ind" x="16" y="22" width="6" height="18" rx="1"/>
+        <rect class="stroke ind" x="26" y="14" width="6" height="26" rx="1"/>
+        <rect class="stroke ind" x="36" y="6"  width="6" height="34" rx="1"/>
+        <circle class="stroke crim" cx="39" cy="9" r="3"/>
+      </svg>
+      <div style="display:grid;grid-template-columns:1fr auto;align-items:start;gap:2rem;flex-wrap:wrap;">
+        <div>
+          <h3 class="fc-title">Live Driver Status <span style="font-family:'Instrument Sans',sans-serif;font-size:.65rem;font-weight:600;color:var(--indigo-bright);letter-spacing:.12em;vertical-align:middle;margin-left:.6rem;background:rgba(99,102,241,0.12);padding:2px 8px;border-radius:20px;border:1px solid rgba(99,102,241,0.25);">BETA</span></h3>
+          <p class="fc-desc">See exactly how many Spark Drivers in Wilkesboro are actively online and waiting on orders — updated live from our Discord bot. No more leaving the house to find out it's not worth it. Check the widget before you even put your shoes on.</p>
+        </div>
+        <div style="flex-shrink:0;background:rgba(8,6,26,0.75);border:1px solid rgba(99,102,241,0.22);border-radius:12px;padding:12px 16px 12px 12px;display:flex;align-items:center;gap:10px;min-width:155px;">
+          <div style="position:relative;width:12px;height:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+            <div style="position:absolute;inset:-1px;border-radius:50%;border:1.5px solid rgba(34,197,94,0.5);animation:dpPulse 2s ease-out infinite;"></div>
+            <div style="position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(34,197,94,0.2);animation:dpPulse 2s ease-out infinite .7s;"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.9);position:relative;z-index:2;"></div>
+          </div>
+          <div>
+            <div style="font-size:.82rem;font-weight:600;color:#f5f3ff;line-height:1.2;">Spark: <span style="color:#22c55e;font-size:1rem;">0</span></div>
+            <div style="font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(199,193,255,.3);margin-top:2px;">drivers online</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="fcard reveal d2" style="grid-column:1/-1;border-color:rgba(34,197,94,0.22);background:rgba(10,15,10,0.55);">
+      <div class="fc-num">06 / 06 &nbsp;·&nbsp; <span style="color:#22c55e;letter-spacing:.08em;">VOICE FEATURE</span></div>
+      <!-- SVG: radio waves + mic -->
+      <svg class="fc-icon-svg" viewBox="0 0 46 46" style="width:52px;height:52px;">
+        <rect class="stroke ind" x="14" y="18" width="18" height="16" rx="3" style="stroke:#22c55e;"/>
+        <line class="stroke ind" x1="23" y1="34" x2="23" y2="40" style="stroke:#22c55e;"/>
+        <line class="stroke ind" x1="17" y1="40" x2="29" y2="40" style="stroke:#22c55e;"/>
+        <path class="stroke ind" d="M10 26a13 13 0 0 1 0-6" style="stroke:#22c55e;"/>
+        <path class="stroke ind" d="M7 29a18 18 0 0 1 0-12" style="stroke:#22c55e;"/>
+        <path class="stroke ind" d="M36 26a13 13 0 0 0 0-6" style="stroke:#22c55e;"/>
+        <path class="stroke ind" d="M39 29a18 18 0 0 0 0-12" style="stroke:#22c55e;"/>
+        <circle class="stroke crim" cx="23" cy="26" r="3" style="stroke:#22c55e;"/>
+      </svg>
+      <div style="display:grid;grid-template-columns:1fr auto;align-items:start;gap:2rem;flex-wrap:wrap;">
+        <div>
+          <h3 class="fc-title" style="color:#f5f3ff;">The CB Radio <span style="font-family:'Instrument Sans',sans-serif;font-size:.65rem;font-weight:600;color:#22c55e;letter-spacing:.12em;vertical-align:middle;margin-left:.6rem;background:rgba(34,197,94,0.08);padding:2px 8px;border-radius:20px;border:1px solid rgba(34,197,94,0.25);">VOICE</span></h3>
+          <p class="fc-desc">One open voice channel — always on, always free. Jump in when you're on a run and want company, need a second opinion on a route, or just want to hear another driver's voice. No appointments, no schedules. Like a CB radio on channel 19 — you show up, you talk.</p>
+        </div>
+        <div class="cb-display">
+          <div class="cb-channel"><span class="cb-dot"></span>CB · WDU</div>
+          <div class="cb-freq" id="cbFreq">462.550</div>
+          <div class="cb-channel" id="cbStatus">● OPEN · 0 online</div>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -571,10 +645,10 @@ footer a:hover{color:var(--indigo-bright);}
           <div class="ch-r on">📢 announcements <span class="ch-pill a">All</span></div>
           <div class="ch-r on">🏠 general-chat <span class="ch-pill a">All</span></div>
           <div class="ch-r on">🌧️ road-conditions <span class="ch-pill a">All</span></div>
-          <div class="ch-r on">🛠️ vehicle-maintenance <span class="ch-pill a">All</span></div>
+          <div class="ch-r on">📚 driver-education <span class="ch-pill a">All</span></div>
+          <div class="ch-r on">🔧 the-garage <span class="ch-pill a">All</span></div>
+          <div class="ch-r on">📻 cb-radio <span class="ch-pill a" style="border-color:rgba(34,197,94,.3);color:#22c55e;">Voice</span></div>
           <div class="ch-r off"><span class="lock">🔒</span> og-lounge <span class="ch-pill o">OG</span></div>
-          <div class="ch-r off"><span class="lock">🔒</span> earnings-strategy <span class="ch-pill o">OG</span></div>
-          <div class="ch-r off"><span class="lock">🔒</span> og-direct-chat <span class="ch-pill o">OG</span></div>
         </div>
       </div>
     </div>
@@ -585,7 +659,7 @@ footer a:hover{color:var(--indigo-bright);}
 <div class="signup-wrap" id="join">
   <div class="scard">
     <h2 class="stitle">Join <em>WilkesDriversUnited.</em></h2>
-    <p class="ssub">Fill out the form. Your Discord invite arrives within 24 hours.</p>
+    <p class="ssub">Fill out the form. When we go live, your Discord invite will arrive in your inbox.</p>
     <form id="wduForm" action="https://formspree.io/f/xbdawlzq" method="POST">
       <div class="field"><label>Your Name</label><input type="text" name="name" placeholder="First name is fine" required/></div>
       <div class="field"><label>Phone Number</label><input type="tel" name="phone" placeholder="(336) 555-0100" required/></div>
@@ -600,7 +674,7 @@ footer a:hover{color:var(--indigo-bright);}
     <div class="success-msg" id="successMsg">
       <div class="success-icon">🎉</div>
       <h3>You're on the list!</h3>
-      <p>We got your info. When the Discord goes live you'll be one of the first through the door.</p>
+      <p>We got your info. When we go live, your Discord invite will be waiting in your inbox.</p>
       <p class="success-sub">Drive safe! 🚗</p>
     </div>
   </div>
@@ -797,7 +871,7 @@ if(wduForm){
 ═══════════════════════════════════════ */
 const SHOW_DRIVER_STATUS = true;          // ← flip to false to hide
 const STATUS_API_URL     = null;          // ← paste your bot URL here when ready e.g. 'https://your-api.com/status'
-const REFRESH_INTERVAL   = 60000;        // refresh every 60 seconds
+const REFRESH_INTERVAL   = 300000;       // refresh every 5 minutes (bot will push updates more frequently)
 
 (function initDriverPanel() {
   const panel    = document.getElementById('driverPanel');
@@ -822,12 +896,8 @@ const REFRESH_INTERVAL   = 60000;        // refresh every 60 seconds
 
   async function fetchStatus() {
     if (!STATUS_API_URL) {
-      // ── DEMO MODE: simulate realistic driver counts ──
-      const hour = new Date().getHours();
-      // more drivers during peak delivery hours
-      const base = (hour >= 10 && hour <= 14) || (hour >= 17 && hour <= 20) ? 5 : 2;
-      const demo = base + Math.floor(Math.random() * 4);
-      setCount(demo);
+      // ── DEMO MODE: show 0 until bot is live ──
+      setCount(0);
       return;
     }
     try {
@@ -843,6 +913,51 @@ const REFRESH_INTERVAL   = 60000;        // refresh every 60 seconds
 
   fetchStatus();
   setInterval(fetchStatus, REFRESH_INTERVAL);
+})();
+
+
+/* ═══════════════════════════════════════
+   CB RADIO — frequency display changes on scroll
+═══════════════════════════════════════ */
+(function cbRadio(){
+  const freqEl   = document.getElementById('cbFreq');
+  const statEl   = document.getElementById('cbStatus');
+  if(!freqEl) return;
+
+  const freqs = [
+    '462.550','467.550','462.575','467.575',
+    '462.600','462.625','462.650','462.675',
+    '462.700','462.725','467.600','467.625'
+  ];
+  const labels = [
+    'OPEN · 0 online','SCANNING...','OPEN · 0 online',
+    'OPEN · 0 online','SCANNING...','OPEN · 0 online',
+    'OPEN · 0 online','SCANNING...','OPEN · 0 online',
+    'OPEN · 0 online','SCANNING...','OPEN · 0 online'
+  ];
+
+  let lastScroll = 0;
+  let freqIdx    = 0;
+
+  // change freq on scroll — subtle, not spammy
+  window.addEventListener('scroll', ()=>{
+    const sy = window.scrollY;
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+    if(maxScroll <= 0) return;
+    const pct = sy / maxScroll;
+    const newIdx = Math.floor(pct * (freqs.length - 1));
+    if(newIdx !== freqIdx){
+      freqIdx = newIdx;
+      // brief scan flicker
+      freqEl.style.opacity = '.3';
+      statEl.textContent = '● SCANNING...';
+      setTimeout(()=>{
+        freqEl.textContent  = freqs[freqIdx];
+        statEl.textContent  = '● ' + labels[freqIdx];
+        freqEl.style.opacity = '1';
+      }, 180);
+    }
+  });
 })();
 
 </script>
