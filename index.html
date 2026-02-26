@@ -281,6 +281,49 @@ footer a:hover{color:var(--indigo-bright);}
 .success-msg p{font-size:.92rem;color:var(--lav-dim);line-height:1.8;font-weight:300;}
 .success-sub{margin-top:.6rem;color:var(--indigo-bright) !important;font-weight:500 !important;font-size:1rem !important;}
 @keyframes bounceIn{0%{transform:scale(0);opacity:0;}70%{transform:scale(1.15);}100%{transform:scale(1);opacity:1;}}
+
+/* ════════════════════════════════════
+   DRIVER STATUS PANEL
+   Toggle: set SHOW_DRIVER_STATUS = false to hide
+════════════════════════════════════ */
+.driver-panel{
+  position:fixed;top:92px;right:20px;z-index:800;
+  background:rgba(8,6,26,0.88);
+  border:1px solid rgba(99,102,241,0.22);
+  border-radius:14px;
+  padding:10px 16px 10px 12px;
+  display:flex;align-items:center;gap:10px;
+  backdrop-filter:blur(18px);
+  box-shadow:0 8px 32px rgba(0,0,0,.45),0 0 0 1px rgba(99,102,241,0.08);
+  cursor:default;
+  transition:opacity .3s,transform .3s;
+  animation:panelSlideIn .5s cubic-bezier(.16,1,.3,1) 2s both;
+  min-width:172px;
+}
+@keyframes panelSlideIn{from{opacity:0;transform:translateX(24px);}to{opacity:1;transform:translateX(0);}}
+.driver-panel.hidden{display:none;}
+/* status dot cluster */
+.dp-dot-wrap{position:relative;width:12px;height:12px;flex-shrink:0;}
+.dp-dot{width:10px;height:10px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.9);position:relative;z-index:2;}
+.dp-ring{position:absolute;inset:-1px;border-radius:50%;border:1.5px solid rgba(34,197,94,0.55);animation:dpPulse 2s ease-out infinite;}
+.dp-ring2{position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(34,197,94,0.22);animation:dpPulse 2s ease-out infinite .7s;}
+@keyframes dpPulse{0%{transform:scale(.5);opacity:1;}100%{transform:scale(2.4);opacity:0;}}
+/* offline state */
+.driver-panel.offline .dp-dot{background:#f59e0b;box-shadow:0 0 8px rgba(245,158,11,.8);}
+.driver-panel.offline .dp-ring{border-color:rgba(245,158,11,.5);}
+.driver-panel.offline .dp-ring2{border-color:rgba(245,158,11,.2);}
+/* text */
+.dp-text{display:flex;flex-direction:column;gap:1px;}
+.dp-count{font-family:'Instrument Sans',sans-serif;font-size:.82rem;font-weight:600;color:#f5f3ff;line-height:1.1;letter-spacing:-.01em;}
+.dp-count span{color:#22c55e;font-size:1rem;}
+.driver-panel.offline .dp-count span{color:#f59e0b;}
+.dp-label{font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(199,193,255,.35);}
+.dp-updated{font-size:.5rem;letter-spacing:.06em;color:rgba(199,193,255,.2);margin-top:1px;}
+/* loading shimmer */
+.dp-count.loading span{color:rgba(199,193,255,.3);}
+@media(max-width:600px){
+  .driver-panel{top:auto;bottom:20px;right:16px;top:unset;}
+}
 .d1{transition-delay:.1s}.d2{transition-delay:.22s}.d3{transition-delay:.34s}.d4{transition-delay:.46s}
 /* ── MOBILE OVERRIDES ── */
 @media(max-width:480px){
@@ -313,6 +356,24 @@ footer a:hover{color:var(--indigo-bright);}
 <div class="cdot" id="cdot"></div>
 <div class="cring" id="cring"></div>
 <canvas id="cv"></canvas>
+
+
+<!-- ═══════════════════════════════════════
+     DRIVER STATUS PANEL
+     Toggle visibility: set SHOW_DRIVER_STATUS = false in JS below
+═══════════════════════════════════════ -->
+<div class="driver-panel" id="driverPanel">
+  <div class="dp-dot-wrap">
+    <div class="dp-ring"></div>
+    <div class="dp-ring2"></div>
+    <div class="dp-dot"></div>
+  </div>
+  <div class="dp-text">
+    <div class="dp-count" id="dpCount">Spark: <span id="dpNum">—</span></div>
+    <div class="dp-label" id="dpLabel">drivers online now</div>
+    <div class="dp-updated" id="dpUpdated">updating...</div>
+  </div>
+</div>
 
 <!-- NAV -->
 <nav id="nav">
@@ -724,6 +785,65 @@ if(wduForm){
     }
   });
 }
+
+
+/* ═══════════════════════════════════════
+   DRIVER STATUS PANEL
+   ─────────────────────────────────────
+   TOGGLE: set SHOW_DRIVER_STATUS = false to hide the panel entirely
+   SOURCE: replace STATUS_API_URL with your bot's public endpoint
+           endpoint should return JSON: { "online": 4 }
+           Until bot is live, panel shows simulated demo data
+═══════════════════════════════════════ */
+const SHOW_DRIVER_STATUS = true;          // ← flip to false to hide
+const STATUS_API_URL     = null;          // ← paste your bot URL here when ready e.g. 'https://your-api.com/status'
+const REFRESH_INTERVAL   = 60000;        // refresh every 60 seconds
+
+(function initDriverPanel() {
+  const panel    = document.getElementById('driverPanel');
+  const numEl    = document.getElementById('dpNum');
+  const labelEl  = document.getElementById('dpLabel');
+  const updEl    = document.getElementById('dpUpdated');
+
+  // hide if toggled off
+  if (!SHOW_DRIVER_STATUS) { panel.classList.add('hidden'); return; }
+
+  function timeAgo() {
+    const now = new Date();
+    return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function setCount(n) {
+    numEl.textContent = n;
+    labelEl.textContent = n === 1 ? 'driver online now' : 'drivers online now';
+    updEl.textContent = 'updated ' + timeAgo();
+    panel.classList.toggle('offline', n === 0);
+  }
+
+  async function fetchStatus() {
+    if (!STATUS_API_URL) {
+      // ── DEMO MODE: simulate realistic driver counts ──
+      const hour = new Date().getHours();
+      // more drivers during peak delivery hours
+      const base = (hour >= 10 && hour <= 14) || (hour >= 17 && hour <= 20) ? 5 : 2;
+      const demo = base + Math.floor(Math.random() * 4);
+      setCount(demo);
+      return;
+    }
+    try {
+      const res  = await fetch(STATUS_API_URL, { cache: 'no-store' });
+      const data = await res.json();
+      setCount(typeof data.online === 'number' ? data.online : 0);
+    } catch {
+      numEl.textContent   = '—';
+      labelEl.textContent = 'status unavailable';
+      updEl.textContent   = 'retrying...';
+    }
+  }
+
+  fetchStatus();
+  setInterval(fetchStatus, REFRESH_INTERVAL);
+})();
 
 </script>
 </body>
