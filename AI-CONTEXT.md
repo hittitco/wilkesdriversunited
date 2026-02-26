@@ -25,8 +25,31 @@ Focus: Support, strategy, and live driver coordination.
 ## 🤖 Discord Structure (Reference)
 - **Categories:** [INFO], [COMMUNITY], [cb-radio], [ADMIN], [OG LOUNGE], [THE GARAGE].
 - **Bot Logic:** Python (discord.py + FastAPI). 
-- **Inactivity Filter:** Auto-clockout after 6 hours of silence.
+-
+## AOU
+🚦 Final Architecture (So You’re Confident)
 
+Discord Users
+→ /clockin, /ping, /clockout
+→ Python bot updates in-memory dictionary
+
+FastAPI Endpoint
+→ GET /status
+→ Returns:
+
+{ "online": 3 }
+
+Website Widget
+→ Polls every 30 seconds
+→ Updates:
+
+#dpNum
+
+#dpUpdated
+
+Toggles .offline if count = 0
+
+That’s clean.
 ## 📝 Guidelines for Copilot
 1. NEVER suggest a "rebuild" or "refactor" into a framework.
 2. Edit `index.html` directly.
