@@ -489,6 +489,24 @@ footer a:hover{color:var(--indigo-bright);}
       </div>
     </div>
 
+    <!-- Drivers online count (populated by the Discord bot API) -->
+    <div id="online-count" class="hero-sub" style="margin-bottom:1rem; opacity:0; animation:riseUp 1s 1.6s ease forwards;">
+      Drivers online: <span id="driversOnline">0</span>
+    </div>
+    <script>
+    async function updateOnline() {
+      try {
+        const res = await fetch('https://wdu-bot.fly.dev/status');
+        const data = await res.json();
+        document.getElementById('driversOnline').textContent = data.drivers_online;
+      } catch (err) {
+        console.error('unable to fetch online count', err);
+      }
+    }
+    setInterval(updateOnline, 30_000);
+    updateOnline();
+    </script>
+
     <!-- H1: each word its own direction -->
     <h1>
       <span class="w1">Wilkes</span>
