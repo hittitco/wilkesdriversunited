@@ -864,53 +864,63 @@ if(wduForm){
 /* ═══════════════════════════════════════
    DRIVER STATUS PANEL
    ─────────────────────────────────────
-   TOGGLE: set SHOW_DRIVER_STATUS = false to hide the panel entirely
-   SOURCE: replace STATUS_API_URL with your bot's public endpoint
-           endpoint should return JSON: { "online": 4 }
-           Until bot is live, panel shows simulated demo data
+   TOGGLE:  set SHOW_DRIVER_STATUS = false to hide entirely
+   GO LIVE: paste your Railway bot URL into STATUS_API_URL
+            Bot must return JSON: { "online": 4 }
+            Commands: /clockin /clockout /ping /drivers /reset
+            Auto-expire: 45 min inactivity = auto clockout
 ═══════════════════════════════════════ */
-const SHOW_DRIVER_STATUS = true;          // ← flip to false to hide
-const STATUS_API_URL     = null;          // ← paste your bot URL here when ready e.g. 'https://your-api.com/status'
-const REFRESH_INTERVAL   = 300000;       // refresh every 5 minutes (bot will push updates more frequently)
+const SHOW_DRIVER_STATUS = true;          // ← false to hide panel
+const STATUS_API_URL     = 'https://web-production-9b82.up.railway.app/status';          // ← 'https://your-bot.up.railway.app/status'
+const REFRESH_INTERVAL   = 30000;        // 30 seconds — fast enough to feel live
 
 (function initDriverPanel() {
-  const panel    = document.getElementById('driverPanel');
-  const numEl    = document.getElementById('dpNum');
-  const labelEl  = document.getElementById('dpLabel');
-  const updEl    = document.getElementById('dpUpdated');
+  const panel  = document.getElementById('driverPanel');
+  const numEl  = document.getElementById('dpNum');
+  const labEl  = document.getElementById('dpLabel');
+  const updEl  = document.getElementById('dpUpdated');
 
-  // hide if toggled off
   if (!SHOW_DRIVER_STATUS) { panel.classList.add('hidden'); return; }
 
-  function timeAgo() {
-    const now = new Date();
-    return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  function timestamp() {
+    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
   function setCount(n) {
+    // update the number — this is the span inside .dp-count
     numEl.textContent = n;
-    labelEl.textContent = n === 1 ? 'driver online now' : 'drivers online now';
-    updEl.textContent = 'updated ' + timeAgo();
+    // singular vs plural label
+    labEl.textContent = n === 1 ? 'driver online now' : 'drivers online now';
+    // last updated time
+    updEl.textContent = 'updated ' + timestamp();
+    // offline state = amber dot, online = green dot
     panel.classList.toggle('offline', n === 0);
   }
 
   async function fetchStatus() {
     if (!STATUS_API_URL) {
-      // ── DEMO MODE: show 0 until bot is live ──
+      // ── DEMO MODE ──
+      // Shows 0 until you paste the real Railway URL above.
+      // Once STATUS_API_URL is set this block never runs.
       setCount(0);
       return;
     }
     try {
       const res  = await fetch(STATUS_API_URL, { cache: 'no-store' });
+      if (!res.ok) throw new Error('bad status');
       const data = await res.json();
+      // ChatGPT bot returns { "online": N } — we read data.online
       setCount(typeof data.online === 'number' ? data.online : 0);
     } catch {
-      numEl.textContent   = '—';
-      labelEl.textContent = 'status unavailable';
-      updEl.textContent   = 'retrying...';
+      // network error or bot offline — show dash, don't crash
+      numEl.textContent = '—';
+      labEl.textContent = 'status unavailable';
+      updEl.textContent = 'retrying...';
+      panel.classList.add('offline');
     }
   }
 
+  // run immediately then every 30 seconds
   fetchStatus();
   setInterval(fetchStatus, REFRESH_INTERVAL);
 })();
