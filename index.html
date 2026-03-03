@@ -419,6 +419,42 @@ footer a:hover{color:var(--indigo-bright);}
   .stitle{font-size:1.7rem;}
   footer{flex-direction:column;text-align:center;gap:.5rem;}
 }
+/* ── MOBILE RESPONSIVE OVERRIDE ── */
+@media (max-width: 768px) {
+  /* Fixes the "Live Driver Status" and "CB Radio" internal grid */
+  .fcard[style*="grid-column:1/-1"] > div[style*="display:grid"] {
+    grid-template-columns: 1fr !important; /* Forces vertical stack */
+    text-align: center;
+    justify-items: center;
+    gap: 1.5rem !important;
+  }
+
+  /* Centers the SVG icons and text on mobile */
+  .fcard[style*="grid-column:1/-1"] .fc-icon-svg {
+    margin: 0 auto 1.4rem auto !important;
+  }
+
+  /* Ensures the widgets (the little status boxes) don't stretch too wide */
+  .fcard[style*="grid-column:1/-1"] div[style*="flex-shrink:0"],
+  .cb-display {
+    width: 100% !important;
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  /* Fix for the Top Badge scaling */
+  .hero-badge {
+    flex-direction: column;
+    border-radius: 12px;
+  }
+  .badge-status, .badge-loc {
+    border-radius: 12px !important;
+    border: 1px solid var(--border) !important;
+    width: 100%;
+    justify-content: center;
+  }
+  .badge-div { display: none; }
+}
 
 
 </style>
