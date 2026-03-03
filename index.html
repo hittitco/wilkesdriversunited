@@ -420,6 +420,31 @@ footer a:hover{color:var(--indigo-bright);}
   footer{flex-direction:column;text-align:center;gap:.5rem;}
 }
 
+/* Fix for CB Radio and Live Status Card Scaling */
+.feature-card-content {
+    display: flex;
+    flex-direction: column; /* Forces vertical stacking by default on mobile */
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+}
+
+/* Ensure the digital displays (CB Freq/Status) don't overflow */
+#cbFreq, .status-widget-container {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+/* Desktop override: If the screen is wider than 768px, put them side-by-side again */
+@media (min-width: 769px) {
+    .feature-card-content {
+        flex-direction: row;
+        text-align: left;
+        justify-content: space-between;
+    }
+}
+
 </style>
 </head>
 <body>
